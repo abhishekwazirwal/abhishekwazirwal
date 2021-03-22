@@ -1,0 +1,17 @@
+@echo off
+
+SETLOCAL EnableDelayedExpansion
+ 
+
+tabcmd login -s https://tableau.intranet.mckinsey.com -t CDS -u "Abhishek Sharma******" -p "*********"
+
+
+tabcmd createsiteusers "C:\ss\Book1.csv" --role "SiteAdministratorExplorer"
+pause
+
+goto :eof
+
+
+ 
+
+:eof

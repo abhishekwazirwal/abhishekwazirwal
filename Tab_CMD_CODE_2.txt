@@ -1,0 +1,18 @@
+@echo off
+
+SETLOCAL EnableDelayedExpansion
+ 
+
+tabcmd login -s https://tableau.intranet.mckinsey.com -t CDS -u "Abhishek Sharma******" -p "*********"
+
+
+FOR /F "tokens=1" %i IN (C:\ss\Employees.txt) DO tabcmd export "MoscowBarometerpng/Final?Chargecode=%i" -fullpdf -pagesize unspecified -f "C:\ss\Moscow_Barometer_%i.pdf"
+FOR /F "tokens=1" %i IN (C:\ss\Employees.txt) DO tabcmd export "MoscowBarometerpng/Final?Chargecode=%i" --png -f "C:\ss\%i.png"
+pause
+
+goto :eof
+
+
+ 
+
+:eof
