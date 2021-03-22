@@ -1,0 +1,42 @@
+from ayx import Alteryx
+Alteryx.installPackage("xlrd")
+import xlrd
+import warnings
+warnings.warn('wmsg', UserWarning)
+import pysftp
+from ayx import Alteryx
+Alteryx.readMetadata("#1")
+import pandas as pd
+
+Data = pd.DataFrame(Alteryx.read("#1"))
+Alteryx.getIncomingConnectionNames()
+Alteryx.getWorkflowConstantNames()
+Server_path = Data['Server_path'].values.tolist()
+File_name_zip = Data['File_name_zip'].values.tolist()
+File_name_excel = Data['File_name_excel'].values.tolist()
+Server_path
+
+path = "%temp%"+File_name_zip[0]
+
+path2 = Alteryx.getWorkflowConstant("Engine.TempFilePath")
+
+path3 = Alteryx.getWorkflowConstant("Engine.TempFilePath")+File_name_excel[0]
+
+myHostname = "mft.**********.com"
+myUsername = "********"
+myPassword = "********"
+
+
+cnopts = pysftp.CnOpts()
+cnopts.hostkeys = None
+
+with pysftp.Connection(host=myHostname, username=myUsername, password=myPassword, cnoptsts=cnopts) as sftp:
+    print ("Connection succesfully stablished ... ")
+    sftp.get(Server_path[0], path)
+
+import zipfile
+archive = zipfile.ZipFile(path, 'r')
+xlfile = archive.open(File_name_excel[0])
+
+df = pd.read_excel(xlfile)
+Alteryx.write(df,1)
